@@ -664,6 +664,20 @@
         const bgMusic = document.getElementById('bgMusic');
         const correctSound = document.getElementById('correctSound');
         const wrongSound = document.getElementById('wrongSound');
+        document.addEventListener('touchstart', function unlockAudio() {
+    try {
+        bgMusic.play().then(() => bgMusic.pause());
+        correctSound.play().then(() => correctSound.pause());
+        wrongSound.play().then(() => wrongSound.pause());
+        const voiceNote = document.getElementById('voiceNote');
+        if (voiceNote) {
+            voiceNote.play().then(() => voiceNote.pause());
+        }
+    } catch (e) {
+        console.log('Audio unlock failed:', e);
+    }
+    document.removeEventListener('touchstart', unlockAudio);
+}, { once: true });
 
         // Mobile unlock for audio (background + effects)
 document.addEventListener('touchstart', function initAudio() {
@@ -1108,3 +1122,4 @@ function spawnConfetti(count = 40) {
 </body>
 
 </html>
+

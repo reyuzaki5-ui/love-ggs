@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz for Afsara 💕</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
+            animation: slideIn 0.6s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .level-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.5s ease;
+        }
+
+        .question-container {
+            animation: questionSlide 0.5s ease-out;
+        }
+
+        @keyframes questionSlide {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .question {
+            font-size: 1.3em;
+            color: #333;
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+
+        .options {
+            display: grid;
+            gap: 15px;
+        }
+
+        .option {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 18px;
+            border-radius: 15px;
+            border: none;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            font-weight: 500;
+        }
+
+        .option:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .option:active {
+            transform: translateY(-2px);
+        }
+
+        .option.correct {
+            background: linear-gradient(135deg, #00c853 0%, #00e676 100%);
+            animation: correctPulse 0.6s ease-out;
+            box-shadow: 0 0 30px rgba(0, 200, 83, 0.6);
+        }
+
+        @keyframes correctPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .option.wrong {
+            background: linear-gradient(135deg, #d32f2f 0%, #f44336 100%);
+            animation: wrongShake 0.5s ease-out;
+        }
+
+        @keyframes wrongShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .option.disabled {
+            pointer-events: none;
+            opacity: 0.6;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 18px;
+            border: 3px solid #667eea;
+            border-radius: 15px;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #764ba2;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 18px;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(245, 87, 108, 0.4);
+        }
+
+        .error-screen {
+            text-align: center;
+            animation: shake 0.5s ease-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .error-screen img {
+            width: 150px;
+            height: 150px;
+            margin-bottom: 20px;
+        }
+
+        .error-screen h2 {
+            color: #f5576c;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+        }
+
+        .error-screen p {
+            color: #666;
+            margin-bottom: 25px;
+            font-size: 1.1em;
+        }
+
+        .fix-btn {
+            background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .fix-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 30px rgba(245, 87, 108, 0.5);
+        }
+
+        .fixing-screen {
+            text-align: center;
+        }
+
+        .loader {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #667eea;
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            animation: spin 1s linear infinite;
+            margin: 30px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .riddle-container {
+            text-align: center;
+        }
+
+        .riddle-container h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+
+        .riddle-text {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 30px;
+            border-radius: 20px;
+            margin: 20px 0;
+            font-size: 1.3em;
+            color: #333;
+            font-weight: 600;
+            line-height: 1.6;
+        }
+
+        .drive-link {
+            display: inline-block;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            margin: 20px 0;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .drive-link:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 30px rgba(79, 172, 254, 0.4);
+        }
+
+        .passcode-container {
+            margin-top: 30px;
+        }
+
+        .voice-warning {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
+            padding: 25px;
+            border-radius: 20px;
+            margin: 30px 0;
+            text-align: center;
+            animation: warningPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes warningPulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 107, 107, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(255, 107, 107, 0.8); }
+        }
+
+        .voice-warning h3 {
+            color: white;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+
+        .voice-warning p {
+            color: white;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+
+        .audio-player {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .audio-player audio {
+            width: 100%;
+        }
+
+        .proposal-container {
+            text-align: center;
+            animation: heartbeat 1.5s ease-in-out;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            10%, 30% { transform: scale(1.1); }
+            20%, 40% { transform: scale(1); }
+        }
+
+        .proposal-container h1 {
+            font-size: 3em;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 30px;
+        }
+
+        .proposal-message {
+            font-size: 1.5em;
+            color: #333;
+            margin: 30px 0;
+            line-height: 1.8;
+            font-weight: 500;
+        }
+
+        .proposal-buttons {
+            display: grid;
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .accept-btn {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 20px;
+            border: none;
+            border-radius: 20px;
+            font-size: 1.5em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .accept-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(79, 172, 254, 0.5);
+        }
+
+        .reject-btn {
+            background: linear-gradient(135deg, #fc6c85 0%, #f5576c 100%);
+            color: white;
+            padding: 20px;
+            border: none;
+            border-radius: 20px;
+            font-size: 1.5em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .reject-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(245, 87, 108, 0.5);
+        }
+
+        .celebration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #f5576c;
+            animation: confettiFall 3s linear infinite;
+        }
+
+        @keyframes confettiFall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .success-screen {
+            text-align: center;
+            animation: zoomIn 0.8s ease-out;
+        }
+
+        @keyframes zoomIn {
+            from {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .success-screen h1 {
+            font-size: 2.5em;
+            color: #4facfe;
+            margin-bottom: 30px;
+        }
+
+        .success-screen .confession-text {
+            font-size: 1.8em;
+            color: #f5576c;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .success-screen .status-text {
+            font-size: 1.3em;
+            color: #666;
+            margin: 20px 0;
+            line-height: 1.6;
+        }
+
+        .insta-link {
+            display: inline-block;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 20px 40px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-top: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .insta-link:hover {
+            transform: scale(1.1);
+            box-shadow: 0 15px 40px rgba(245, 87, 108, 0.5);
+        }
+
+        .vanish-screen {
+            text-align: center;
+            animation: fadeOut 3s ease-out forwards;
+        }
+
+        @keyframes fadeOut {
+            0% { opacity: 1; }
+            70% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        .vanish-screen h1 {
+            font-size: 2.5em;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .hearts-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 30px;
+            animation: floatHeart 6s ease-in-out infinite;
+            opacity: 0.7;
+        }
+
+        @keyframes floatHeart {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            50% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .music-control {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2em;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .music-control:hover {
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .question {
+                font-size: 1.1em;
+            }
+
+            .option {
+                font-size: 1em;
+                padding: 15px;
+            }
+
+            .proposal-container h1 {
+                font-size: 2em;
+            }
+
+            .proposal-message {
+                font-size: 1.2em;
+            }
+
+            .success-screen .confession-text {
+                font-size: 1.4em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <audio id="bgMusic" loop>
+        <source src="background-music.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="correctSound">
+        <source src="correct-sound.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="wrongSound">
+        <source src="wrong-sound.mp3" type="audio/mpeg">
+    </audio>
+
+    <button class="music-control" id="musicToggle" onclick="toggleMusic()">🎵</button>
+
+    <div class="hearts-bg" id="heartsBackground"></div>
+    <div class="container" id="gameContainer">
+        <div class="header">
+            <div class="level-badge" id="levelBadge">Level 1</div>
+            <h1>💕 Quiz Time! 💕</h1>
+            <p style="color: #666; font-size: 1.1em;">Let's see how well you know Saad!</p>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+        </div>
+
+        <div id="quizContent"></div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "What is Saad's favourite animal?",
+                options: ["Parrot", "Dog", "Pig", "Hawk"],
+                correct: 3
+            },
+            {
+                question: "Who does Saad love most (instead of Afsara)?",
+                options: ["Teacher", "Father", "Mother", "Sister"],
+                correct: 2
+            },
+            {
+                question: "Who does Saad worship?",
+                options: ["God", "Jesus", "Baphomet", "Lucifer"],
+                correct: 2
+            },
+            {
+                question: "Who is Saad's idol?",
+                options: ["Jeff Nippard", "David Laid", "Zyzz", "Jeff Seid"],
+                correct: 3
+            },
+            {
+                question: "What does Saad hate the most? (Name anything)",
+                type: "input"
+            },
+            {
+                question: "What's your thought about Saad? How is he as a guy?",
+                type: "input"
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let level = 1;
+        let musicPlaying = false;
+
+        const bgMusic = document.getElementById('bgMusic');
+        const correctSound = document.getElementById('correctSound');
+        const wrongSound = document.getElementById('wrongSound');
+
+        function toggleMusic() {
+            if (musicPlaying) {
+                bgMusic.pause();
+                document.getElementById('musicToggle').textContent = '🔇';
+                musicPlaying = false;
+            } else {
+                bgMusic.play().catch(e => console.log('Music play failed:', e));
+                document.getElementById('musicToggle').textContent = '🎵';
+                musicPlaying = true;
+            }
+        }
+
+        document.addEventListener('click', function initMusic() {
+            if (!musicPlaying) {
+                bgMusic.play().catch(e => console.log('Music play failed:', e));
+                musicPlaying = true;
+            }
+            document.removeEventListener('click', initMusic);
+        }, { once: true });
+
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        function createFloatingHearts() {
+            const heartsContainer = document.getElementById('heartsBackground');
+            for (let i = 0; i < 15; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.textContent = '❤️';
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDelay = Math.random() * 6 + 's';
+                heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
+                heartsContainer.appendChild(heart);
+            }
+        }
+
+        function displayQuestion() {
+            const quizContent = document.getElementById('quizContent');
+            const q = questions[currentQuestion];
+
+            if (q.type === 'input') {
+                quizContent.innerHTML = `
+                    <div class="question-container">
+                        <div class="question">${currentQuestion + 1}. ${q.question}</div>
+                        <input type="text" class="input-field" id="userInput" placeholder="Type your answer...">
+                        <button class="submit-btn" onclick="handleInputAnswer()">Submit</button>
+                    </div>
+                `;
+            } else {
+                let optionsHTML = '';
+                q.options.forEach((option, index) => {
+                    optionsHTML += `<button class="option" onclick="checkAnswer(${index})" data-index="${index}">${option}</button>`;
+                });
+
+                quizContent.innerHTML = `
+                    <div class="question-container">
+                        <div class="question">${currentQuestion + 1}. ${q.question}</div>
+                        <div class="options">${optionsHTML}</div>
+                    </div>
+                `;
+            }
+
+            updateProgress();
+        }
+
+        function checkAnswer(selected) {
+            const q = questions[currentQuestion];
+            const buttons = document.querySelectorAll('.option');
+            
+            buttons.forEach(btn => btn.classList.add('disabled'));
+
+            if (selected === q.correct) {
+                buttons[selected].classList.add('correct');
+                correctSound.play().catch(e => console.log('Sound play failed:', e));
+                score++;
+                
+                setTimeout(() => {
+                    nextQuestion();
+                }, 1200);
+            } else {
+                buttons[selected].classList.add('wrong');
+                wrongSound.play().catch(e => console.log('Sound play failed:', e));
+                
+                setTimeout(() => {
+                    buttons[q.correct].classList.add('correct');
+                }, 500);
+
+                setTimeout(() => {
+                    nextQuestion();
+                }, 2000);
+            }
+        }
+
+        function handleInputAnswer() {
+            const input = document.getElementById('userInput').value.trim();
+            if (input) {
+                correctSound.play().catch(e => console.log('Sound play failed:', e));
+                score++;
+                
+                if (currentQuestion === 5) {
+                    setTimeout(() => {
+                        showBugScreen();
+                    }, 800);
+                } else {
+                    setTimeout(() => {
+                        nextQuestion();
+                    }, 800);
+                }
+            } else {
+                alert('Please enter an answer!');
+            }
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            if (currentQuestion < questions.length) {
+                displayQuestion();
+            }
+        }
+
+        function showBugScreen() {
+            const quizContent = document.getElementById('quizContent');
+            quizContent.innerHTML = `
+                <div class="error-screen">
+                    <img src="error-bug.png" alt="Error" onerror="this.style.display='none'">
+                    <h2>⚠️ Ono! Bug Appeared!</h2>
+                    <p>Saad must be a bad developer 😅</p>
+                    <p style="color: #999; font-size: 0.9em;">Press the button below to repair it</p>
+                    <button class="fix-btn" onclick="fixBug()">🔧 Fix the Bug</button>
+                </div>
+            `;
+            wrongSound.play().catch(e => console.log('Sound play failed:', e));
+        }
+
+        function fixBug() {
+            const quizContent = document.getElementById('quizContent');
+            quizContent.innerHTML = `
+                <div class="fixing-screen">
+                    <h2 style="color: #667eea; margin-bottom: 20px;">Fixing the bug...</h2>
+                    <div class="loader"></div>
+                    <p style="color: #666; margin-top: 20px;">Please wait while we repair the system 🔧</p>
+                </div>
+            `;
+
+            setTimeout(() => {
+                showLevel2();
+            }, 3000);
+        }
+
+        function showLevel2() {
+            level = 2;
+            document.getElementById('levelBadge').textContent = 'Level 2';
+            document.getElementById('progressBar').style.width = '0%';
+            
+            const quizContent = document.getElementById('quizContent');
+            quizContent.innerHTML = `
+                <div class="riddle-container">
+                    <h2>🔍 Decode the Message</h2>
+                    <p style="color: #666; font-size: 1.1em; margin-bottom: 20px;">Something big is coming... Can you solve this riddle?</p>
+                    
+                    <div class="riddle-text">
+                        "Jei dalim Gache mou chilo,<br>
+                        Pasher ata gache Kon pakhi chilo?"
+                    </div>
+
+                    <input type="text" class="input-field" id="riddleAnswer" placeholder="Enter your answer...">
+                    <button class="submit-btn" onclick="checkRiddle()">Submit Answer</button>
+                    
+                    <div id="riddleResult" style="margin-top: 20px;"></div>
+                </div>
+            `;
+        }
+
+        function checkRiddle() {
+            const answer = document.getElementById('riddleAnswer').value.trim().toLowerCase();
+            const result = document.getElementById('riddleResult');
+
+            if (answer === 'tota') {
+                correctSound.play().catch(e => console.log('Sound play failed:', e));
+                result.innerHTML = `
+                    <div style="animation: fadeIn 0.5s ease-out;">
+                        <h3 style="color: #4facfe; margin-bottom: 15px;">✨ Correct! ✨</h3>
+                        <p style="color: #666; margin-bottom: 20px;">Now, find the hidden key in this secret location:</p>
+                        <a href="https://drive.google.com/file/d/1znFVsYkvVig_BX5M0xkFIv4SrfV3od9u/view?usp=sharing" target="_blank" class="drive-link">
+                            🔑 Open Secret Drive
+                        </a>
+                        <div class="passcode-container">
+                            <p style="color: #666; margin-bottom: 15px; font-weight: 600;">Found the passcode? Enter it below:</p>
+                            <input type="text" class="input-field" id="passcodeInput" placeholder="Enter the magical passcode...">
+                            <button class="submit-btn" onclick="checkPasscode()">Unlock Level 3</button>
+                        </div>
+                    </div>
+                `;
+            } else {
+                wrongSound.play().catch(e => console.log('Sound play failed:', e));
+                result.innerHTML = `<p style="color: #f5576c; font-weight: 600;">❌ Not quite right! Try again...</p>`;
+            }
+        }
+
+        function checkPasscode() {
+            const passcode = document.getElementById('passcodeInput').value.trim().toLowerCase();
+            const correctPasscode = 'abrakadabra kala kingkong marlei bole chu chu chudlingpong';
+
+            if (passcode === correctPasscode) {
+                correctSound.play().catch(e => console.log('Sound play failed:', e));
+                showRepairAnimation();
+            } else {
+                wrongSound.play().catch(e => console.log('Sound play failed:', e));
+                alert('❌ Incorrect passcode! Check the key image carefully.');
+            }
+        }
+
+        function showRepairAnimation() {
+            const quizContent = document.getElementById('quizContent');
+            quizContent.innerHTML = `
+                <div class="fixing-screen">
+                    <h2 style="color: #4facfe; margin-bottom: 20px;">🔓 System Unlocked!</h2>
+                    <div class="loader"></div>
+                    <p style="color: #666; margin-top: 20px;">Loading Level 3... ✨</p>
+                </div>
+            `;
+
+            setTimeout(() => {
+                showProposal();
+            }, 3000);
+        }
+
+        function showProposal() {
+    level = 3;
+    document.getElementById('levelBadge').textContent = 'Level 3 - Final';
+    document.getElementById('progressBar').style.width = '100%';
+
+    const quizContent = document.getElementById('quizContent');
+    quizContent.innerHTML = `
+        <div class="proposal-container">
+            <div class="voice-warning">
+                <h3>⚠️ VERY IMPORTANT ⚠️</h3>
+                <p>Before you proceed, you MUST listen to this voice note from Saad:</p>
+                <div class="audio-player">
+                    <audio controls id="voiceNote">
+                        <source src="voice-note.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                </div>
+            </div>
+
+            <div class="proposal-message">
+                Before you decide, listen carefully. You're currently blocked from everywhere — don't panic.
+                If you say <strong>YES</strong>, you'll get a secret chamber to reunite with Saad.
+                If you say <strong>NO</strong>, Saad vanishes from your life forever.
+            </div>
+
+            <div style="text-align:left; background: #fff7fb; border: 2px dashed #f093fb; padding: 16px; border-radius: 16px;">
+                <strong style="color:#f5576c;">Game rules:</strong>
+                <ul style="margin:10px 0 0 18px; line-height:1.6; color:#555;">
+                    <li>You can't quit the game.</li>
+                    <li>No checking social media or call logs.</li>
+                    <li>No reading or sending texts.</li>
+                </ul>
+            </div>
+
+            <div class="proposal-buttons">
+                <button class="accept-btn" id="acceptBtn" disabled>✅ Yes, I want the secret chamber</button>
+                <button class="reject-btn" id="rejectBtn" disabled>❌ No, vanish forever</button>
+                <p id="listenHint" style="color:#f5576c; font-weight:600; margin-top:6px;">
+                    Please play the voice note first. Buttons unlock after listening.
+                </p>
+            </div>
+        </div>
+    `;
+
+    // Enforce listening before enabling buttons
+    const voiceNote = document.getElementById('voiceNote');
+    const acceptBtn = document.getElementById('acceptBtn');
+    const rejectBtn = document.getElementById('rejectBtn');
+    const listenHint = document.getElementById('listenHint');
+
+    let started = false;
+    let unlocked = false;
+
+    function enableDecisionButtons() {
+        if (unlocked) return;
+        unlocked = true;
+        acceptBtn.disabled = false;
+        rejectBtn.disabled = false;
+        listenHint.textContent = "You can choose now.";
+        listenHint.style.color = "#4facfe";
+    }
+
+    voiceNote.addEventListener('play', () => {
+        if (!started) {
+            started = true;
+            // Give it a few seconds to ensure she actually listened
+            setTimeout(enableDecisionButtons, 7000);
+        }
+    });
+
+    // Also unlock if the note finishes
+    voiceNote.addEventListener('ended', enableDecisionButtons);
+
+    // Handlers
+    acceptBtn.addEventListener('click', () => {
+        showSuccessScreen();
+    });
+
+    rejectBtn.addEventListener('click', () => {
+        showVanishScreen();
+    });
+}
+
+function showSuccessScreen() {
+    const quizContent = document.getElementById('quizContent');
+    quizContent.innerHTML = `
+        <div class="success-screen">
+            <h1>💖 Commitment Locked</h1>
+            <div class="confession-text">Afsara, You just confessed!!</div>
+            <p class="status-text">
+                You're Saad's girlfriend now. Here's the secret link to make contact with him.
+                Saad is currently vanished — use this chamber to reunite.
+            </p>
+            <a href="https://example.com/secret-chamber" target="_blank" class="insta-link">🔒 Enter Secret Chamber</a>
+        </div>
+    `;
+
+    spawnConfetti(60);
+}
+
+function showVanishScreen() {
+    const quizContent = document.getElementById('quizContent');
+    quizContent.innerHTML = `
+        <div class="vanish-screen">
+            <h1>💔 Choice Made</h1>
+            <p style="color:#666; font-size:1.1em; line-height:1.7;">
+                You chose to let Saad vanish. The chamber is sealed. The game will fade away…
+            </p>
+        </div>
+    `;
+
+    setTimeout(() => {
+        document.getElementById('gameContainer').style.animation = 'fadeOut 4s ease-out forwards';
+    }, 300);
+}
+
+function spawnConfetti(count = 40) {
+    const layer = document.createElement('div');
+    layer.className = 'celebration';
+    document.body.appendChild(layer);
+
+    for (let i = 0; i < count; i++) {
+        const c = document.createElement('div');
+        c.className = 'confetti';
+        c.style.left = Math.random() * 100 + '%';
+        c.style.background = ['#f5576c', '#f093fb', '#4facfe', '#00f2fe'][Math.floor(Math.random() * 4)];
+        c.style.animationDelay = (Math.random() * 1.5) + 's';
+        c.style.transform = `translateY(-10vh) rotate(${Math.random()*180}deg)`;
+        layer.appendChild(c);
+    }
+
+    setTimeout(() => {
+        layer.remove();
+    }, 3500);
+}
+
+        function showSuccessScreen() {
+            const quizContent = document.getElementById('quizContent');
+            quizContent.innerHTML = `
+                <div class="success-screen">
+                    <h1>💖 Commitment Locked</h1>
+                    <div class="confession-text">Afsara, You just confessed!!</div>
+                    <p class="status-text">
+                        You're Saad's girlfriend now. Here's the secret link to make contact with him.
+                        Saad is currently vanished — use this chamber to reunite.
+                    </p>
+                    <a href="https://www.instagram.com/simonriley532?igsh=MWJlZTUxdGxmcnh0Ng==" target="_blank" class="insta-link">🔒 Enter Secret Chamber</a>
+                </div>
+            `;
+
+            // Optional confetti
+            spawnConfetti(60);
+        }
+
+        function showVanishScreen() {
+            const quizContent = document.getElementById('quizContent');
+            quizContent.innerHTML = `
+                <div class="vanish-screen">
+                    <h1>💔 Choice Made</h1>
+                    <p style="color:#666; font-size:1.1em; line-height:1.7;">
+                        You chose to let Saad vanish. The chamber is sealed. The game will fade away…
+                    </p>
+                </div>
+            `;
+
+            setTimeout(() => {
+                // Fade container to reinforce "vanish"
+                document.getElementById('gameContainer').style.animation = 'fadeOut 2.8s ease-out forwards';
+            }, 300);
+        }
+
+        // Simple confetti spawner (uses existing styles)
+        function spawnConfetti(count = 40) {
+            const layer = document.createElement('div');
+            layer.className = 'celebration';
+            document.body.appendChild(layer);
+
+            for (let i = 0; i < count; i++) {
+                const c = document.createElement('div');
+                c.className = 'confetti';
+                c.style.left = Math.random() * 100 + '%';
+                c.style.background = ['#f5576c', '#f093fb', '#4facfe', '#00f2fe'][Math.floor(Math.random() * 4)];
+                c.style.animationDelay = (Math.random() * 1.5) + 's';
+                c.style.transform = `translateY(-10vh) rotate(${Math.random()*180}deg)`;
+                layer.appendChild(c);
+            }
+
+            setTimeout(() => {
+                layer.remove();
+            }, 3500);
+        }
+
+        // Start hearts background once
+        createFloatingHearts();
+
+        // Kick off Level 1
+        displayQuestion();
+    </script>
+</body>
+</html>

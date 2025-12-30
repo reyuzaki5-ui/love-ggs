@@ -665,6 +665,19 @@
         const correctSound = document.getElementById('correctSound');
         const wrongSound = document.getElementById('wrongSound');
 
+        // Mobile unlock for audio (background + effects)
+document.addEventListener('touchstart', function initAudio() {
+    // Try to play background music
+    bgMusic.play().catch(e => console.log('BG music play failed:', e));
+
+    // Preload sound effects so they can play later
+    correctSound.play().catch(() => correctSound.pause());
+    wrongSound.play().catch(() => wrongSound.pause());
+
+    // Remove listener after first touch
+    document.removeEventListener('touchstart', initAudio);
+}, { once: true });
+
         function toggleMusic() {
             if (musicPlaying) {
                 bgMusic.pause();
@@ -1093,4 +1106,5 @@ function spawnConfetti(count = 40) {
         displayQuestion();
     </script>
 </body>
+
 </html>
